@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/1000962745.svg)](https://doi.org/10.5281/zenodo.15650862)
+
 This FFmpeg command transforms a standard MP4 file into a more engaging visual experience by dynamically overlaying an audio frequency spectrum. It achieves this by first generating a real-time visualization of the input audio's frequencies, then seamlessly compositing this transparent spectrum onto the original video stream, all while efficiently re-encoding the video and directly copying the original audio for optimal quality and playback. The final output is an MP4 optimised for immediate streaming, making audio-centric content visually captivating without compromising performance.
 
 
