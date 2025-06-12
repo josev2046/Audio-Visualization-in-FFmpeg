@@ -1,0 +1,68 @@
+@startuml
+skinparam monochrome false
+skinparam linetype ortho
+
+
+component "Input MP4\n(Video + Audio)" as InputVideo {
+  folder "Video Stream" as InputStreamV #LightBlue
+  folder "Audio Stream" as InputStreamA #LightGreen
+}
+
+node "FFmpeg Processing Engine" as FFmpegEngine {
+  rectangle "Audio Spectrum Generator\n(showfreqs filter)" as SpectrumGen #Gold
+  rectangle "Video Overlay Module\n(overlay filter)" as OverlayModule #LightSalmon
+  rectangle "H.264 Video Encoder\n(libx264)" as VideoEncoder #LightCoral
+  rectangle "Audio Passthrough\n(-c:a copy)" as AudioPassthrough #DarkSeaGreen
+}
+
+component "Output MP4\n(Combined Video + Audio)" as OutputVideo {
+  folder "Dynamic Video Stream" as OutputStreamV #LightBlue
+  folder "Original Audio Stream" as OutputStreamA #LightGreen
+}
+
+' --- Input to Processing ---
+InputStreamV --> OverlayModule : Original Video Frames
+InputStreamA --> SpectrumGen : Audio Samples for Analysis
+InputStreamA --> AudioPassthrough : Original Audio for Direct Copy
+
+' --- Core Processing Steps ---
+SpectrumGen --> OverlayModule : Generates Dynamic Spectrum (with transparency for overlay)
+note right of SpectrumGen
+  Uses 'showfreqs' filter to
+  create a visual representation
+  of audio frequencies.
+  (e.g., s=1920x600, mode=line, fscale=log)
+end note
+
+OverlayModule --> VideoEncoder : Video Stream with Spectrum Overlay
+note right of OverlayModule
+  Uses 'overlay' filter to
+  superimpose the spectrum
+  onto the original video,
+  typically centered.
+end note
+
+' --- Output Generation ---
+VideoEncoder --> OutputStreamV : Encoded H.264 Video Stream
+note right of VideoEncoder
+  Compresses the combined
+  video using H.264 codec.
+  (e.g., -preset medium, -crf 23)
+end note
+
+AudioPassthrough --> OutputStreamA : Copied Audio Stream (no re-encode)
+note right of AudioPassthrough
+  Copies audio directly,
+  preserving original quality
+  and saving processing time.
+end note
+
+' --- Final Output & Optimization ---
+OutputVideo --> "Web/Player" : Optimized for Playback
+note left of OutputVideo
+  Includes '-movflags +faststart'
+  to enable immediate playback
+  on web platforms.
+end note
+
+@enduml
