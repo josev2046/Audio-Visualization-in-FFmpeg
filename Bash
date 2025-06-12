@@ -1,0 +1,8 @@
+ffmpeg -i input_audio_video.mp4 \
+-filter_complex "[0:a]showfreqs=s=1920x600:mode=line:fscale=log:colors=0xFFD700|0xFF4500|0x00FFFF|0x00FF00,format=yuva420p[spectrum]; \
+[0:v][spectrum]overlay=(W-w)/2:(H-h)/2[outv]" \
+-map "[outv]" -map 0:a \
+-c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p \
+-c:a copy \
+-movflags +faststart \
+output_with_spectrum.mp4
