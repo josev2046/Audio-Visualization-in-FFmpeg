@@ -96,4 +96,9 @@ These parameters define how the audio stream is handled for the output.
     * This is the designated **name for your final output video file**.
  
 
+---
+### **Demonstrating the Technique**
 
+This example showcases the `showfreqs` and `overlay` FFmpeg filters in action, transforming a standard audio-centric MP4 into a more visually engaging experience by displaying the live frequency spectrum.
+
+* https://vimeo.com/1092601743/9777adae8f
